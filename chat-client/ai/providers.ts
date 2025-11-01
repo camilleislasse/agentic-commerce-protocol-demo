@@ -1,5 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { createAnthropic } from "@ai-sdk/anthropic";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 import { 
   customProvider, 
@@ -43,12 +44,16 @@ const anthropicClient = createAnthropic({
   apiKey: getApiKey('ANTHROPIC_API_KEY'),
 });
 
+const googleClient = createGoogleGenerativeAI({
+  apiKey: getApiKey('GOOGLE_API_KEY'),
+});
 
 // const xaiClient = createXai({
 //   apiKey: getApiKey('XAI_API_KEY'),
 // });
 
 const languageModels = {
+  "gemini-2-flash-thinking": googleClient("gemini-2.0-flash-thinking-exp-01-21"),
   "gpt-5": openaiClient("gpt-5-2025-08-07"),
   "claude-4-sonnet": anthropicClient('claude-sonnet-4-20250514'),
   // "qwen-qwq": wrapLanguageModel(
@@ -61,6 +66,13 @@ const languageModels = {
 };
 
 export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
+  "gemini-2-flash-thinking": {
+    provider: "Google",
+    name: "Gemini 2.0 Flash Thinking",
+    description: "Google's reasoning model with extended thinking capabilities. Free tier available.",
+    apiVersion: "gemini-2.0-flash-thinking-exp-01-21",
+    capabilities: ["Deep Reasoning", "Thinking", "Free", "Agentic"]
+  },
   "gpt-5": {
     provider: "OpenAI",
     name: "GPT-5",
